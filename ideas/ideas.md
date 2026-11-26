@@ -12,6 +12,7 @@ Write down every idea, big or small! Move it to "Done" when we build it.
 - [ ] Solar system explorer
 
 ## Done ✅
+- [x] Science Lab Escape (room escape with science experiments)
 - [x] Bedroom Escape (room escape with math puzzles)
 - [x] School Cafeteria (lunch lady game)
 - [x] Picture Puzzle (drag & drop)
