@@ -62,7 +62,7 @@ Delete the temporary files afterwards. Gotchas:
 ## Environment notes
 
 - The VS Code workspace has a Salesforce (SLDS) linter that flags plain CSS with "Consider using a utility class slds-…" errors. They don't apply to this project; ignore them.
-- The parent folder is a git repo with **no commits yet**. Only commit when the user asks.
+- Git, publishing (GitHub Pages) and privacy rules for the whole site are in the root `CLAUDE.md`. Only commit when the user asks.
 - Privacy: this will become a public site. Never add the daughter's name, school, location, or photos.
 
 ## Open ideas (hers or suggested; not built yet)
