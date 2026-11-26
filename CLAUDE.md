@@ -23,7 +23,7 @@ journal/             build-day photos (keep faces and names out)
 
 Projects link back home with `../../index.html` and load `../../shared/styles/main.css`.
 
-**Current projects:** Guess the Number, Little Classroom (has a Turkish lesson that uses a `tr-TR` voice), Picture Puzzle (jigsaw shapes in `jigsaw.js`), School Cafeteria (see its own `CLAUDE.md`), Bedroom Escape (all puzzle answers are in `game.js`).
+**Current projects:** Guess the Number, Little Classroom (lessons, games and teacher tools; see its own `CLAUDE.md`), Picture Puzzle (jigsaw shapes in `jigsaw.js`), School Cafeteria (see its own `CLAUDE.md`), Bedroom Escape and Science Lab Escape (all puzzle answers are in each one's `game.js`).
 
 ## Adding a project
 
@@ -58,7 +58,7 @@ Projects link back home with `../../index.html` and load `../../shared/styles/ma
 ## Testing (what has worked)
 
 - `node --check file.js` for syntax.
-- Headless Chrome: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --window-size=1280,800 --virtual-time-budget=N` with `--dump-dom` or `--screenshot`. Drive the game from a **temporary copy** of `index.html` with an extra `<script>`, and delete the copies afterwards.
+- Headless Chrome (Mac: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"`, Windows: `"/c/Program Files/Google/Chrome/Application/chrome.exe"`): `--headless=new --disable-gpu --window-size=1280,800 --virtual-time-budget=N` with `--dump-dom` or `--screenshot`. Drive the game from a **temporary copy** of `index.html` with an extra `<script>`, and delete the copies afterwards.
 - Gotchas found the hard way:
   - `requestAnimationFrame` doesn't tick in headless. Stub it and call loops by hand.
   - CSS transitions and animations are often caught mid-way. Add `*{transition:none!important}` to test copies before judging layout.

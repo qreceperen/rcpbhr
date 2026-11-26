@@ -1,5 +1,13 @@
 // 🏫 LITTLE CLASSROOM
 // The teacher picks a lesson, the class answers questions and earns stars.
+// This file is the main part. Other files add more lessons, games and tools:
+//   more-lessons.js  → Animals, Opposites, Bigger or Smaller, Patterns, Math, Feelings, Time
+//   students.js      → student names and turns
+//   voice.js         → the teacher's own recorded voice
+//   jar.js           → the class reward jar and the party
+//   chalkboard.js    → the teacher's chalkboard for drawing
+//   sorting.js, matching.js, tracing.js, recess.js → the games
+//   desk.js          → builds the desk (it runs last)
 
 const QUESTIONS_PER_LESSON = 5;
 
@@ -109,7 +117,8 @@ function pickOthers(list, count, skip) {
 
 // ---------- The lessons ----------
 // Each lesson makes a question like this:
-// { prompt, speak, picture, pictureClass, choices: [{ label, value }], answer, explain }
+// { prompt, speak, picture, pictureClass, choices: [{ label, value }], choiceClass, answer, explain }
+// A game (like Sorting) has start() instead, and group: "game".
 
 const LESSONS = {
   counting: {
@@ -249,12 +258,19 @@ function makeLessonQuestions(lesson) {
 
 const readAloudBox = document.getElementById("read-aloud");
 
+// Turn "Hello" into [{ text: "Hello", lang: "en-US" }]
+function toParts(parts) {
+  if (!parts) return [];
+  if (typeof parts === "string") return [{ text: parts, lang: "en-US" }];
+  return parts;
+}
+
 // say("Hello") speaks English.
 // say([{ text: "Which one is", lang: "en-US" }, { text: "kedi", lang: "tr-TR" }])
 // speaks each part in its own language, one after the other.
 function say(parts) {
   if (!readAloudBox.checked || !("speechSynthesis" in window)) return;
-  if (typeof parts === "string") parts = [{ text: parts, lang: "en-US" }];
+  parts = toParts(parts);
   speechSynthesis.cancel();
   const voices = speechSynthesis.getVoices();
   parts.forEach(part => {
@@ -269,6 +285,10 @@ function say(parts) {
 }
 // Some browsers load their voices a moment after the page opens
 if ("speechSynthesis" in window) speechSynthesis.getVoices();
+
+function stopTalking() {
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+}
 
 let audio;
 function playNotes(notes) {
@@ -298,6 +318,16 @@ const tadaSound = () => playNotes([523, 659, 784, 1047]);
 
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => (s.hidden = s.id !== id));
+  window.scrollTo(0, 0);
+}
+
+// Games can add a "clean up" job here (like stopping a timer) for when we leave
+const leaveJobs = [];
+
+function goToDesk() {
+  leaveJobs.forEach(job => job());
+  stopTalking();
+  showScreen("desk");
 }
 
 // ---------- The game ----------
@@ -318,29 +348,32 @@ function addToTotal(amount) {
   totalStarsText.textContent = totalStars;
 }
 
-function buildDesk() {
-  const grid = document.getElementById("lesson-grid");
-  Object.entries(LESSONS).forEach(([key, lesson]) => {
-    const card = document.createElement("button");
-    card.className = "lesson-card";
-    card.innerHTML = `<span class="icon">${lesson.icon}</span>${lesson.title}`;
-    card.onclick = () => startLesson(key);
-    grid.appendChild(card);
-  });
+// ⭐ Someone earned a star! (it also goes to the student and the jar)
+function earnStar() {
+  stars++;
+  updateStarBar();
+  giveStudentStar();   // students.js
+  addMarble();         // jar.js
 }
 
 function startLesson(key) {
+  leaveJobs.forEach(job => job());
   currentLessonKey = key;
-  questions = makeLessonQuestions(LESSONS[key]);
-  index = 0;
   stars = 0;
-  showScreen("lesson");
+  startStudentLesson();   // students.js
   updateStarBar();
+  const lesson = LESSONS[key];
+  if (lesson.start) return lesson.start();   // games start themselves
+
+  questions = makeLessonQuestions(lesson);
+  index = 0;
+  showScreen("lesson");
   showQuestion();
 }
 
+// Every star bar on every screen shows the stars
 function updateStarBar() {
-  document.getElementById("star-bar").textContent = "⭐".repeat(stars);
+  document.querySelectorAll(".star-bar").forEach(bar => (bar.textContent = "⭐".repeat(stars)));
 }
 
 function showQuestion() {
@@ -358,13 +391,17 @@ function showQuestion() {
   choicesBox.innerHTML = "";
   q.choices.forEach(choice => {
     const btn = document.createElement("button");
-    btn.className = "choice";
+    btn.className = "choice " + (q.choiceClass || "");
     btn.innerHTML = choice.label;
     btn.onclick = () => answer(btn, choice.value);
     choicesBox.appendChild(btn);
   });
 
-  say(q.speak);
+  // 🧒 Whose turn is it?
+  const student = nextTurn();
+  showTurn(document.getElementById("turn"), student);
+  const turnWords = student ? [{ text: `${student.name}, your turn!`, lang: "en-US" }] : [];
+  say([...turnWords, ...toParts(q.speak)]);
 }
 
 function answer(btn, value) {
@@ -374,30 +411,28 @@ function answer(btn, value) {
   if (String(value) === String(q.answer)) {
     btn.classList.add("correct");
     document.querySelectorAll(".choice").forEach(b => (b.disabled = true));
-    if (firstTry) {
-      stars++;
-      updateStarBar();
-    }
+    if (firstTry) earnStar();
     const praise = pick(PRAISE);
     feedback.textContent = `🎉 ${praise} ${q.explain}`;
     happySound();
-    if (q.explainSpeak) {
-      say([{ text: praise, lang: "en-US" }, ...q.explainSpeak]);
-    } else {
-      say(`${praise} ${q.explain}`);
+    // The teacher's own "Good job!" plays if she recorded one
+    if (!playVoice("goodJob")) {
+      if (q.explainSpeak) say([{ text: praise, lang: "en-US" }, ...q.explainSpeak]);
+      else say(`${praise} ${q.explain}`);
     }
-    setTimeout(nextQuestion, 2200);
+    setTimeout(nextQuestion, 2400);
   } else {
     btn.classList.add("wrong");
     btn.disabled = true;
     firstTry = false;
     feedback.textContent = "Oops! Try again 💪";
     oopsSound();
-    say("Oops! Try again!");
+    if (!playVoice("tryAgain")) say("Oops! Try again!");
   }
 }
 
 function nextQuestion() {
+  if (document.getElementById("lesson").hidden) return;   // the teacher left the lesson
   index++;
   if (index < questions.length) {
     showQuestion();
@@ -406,6 +441,7 @@ function nextQuestion() {
   }
 }
 
+// 🎉 The end of a lesson or a game
 function finishLesson() {
   addToTotal(stars);
   showScreen("finish");
@@ -417,8 +453,12 @@ function finishLesson() {
   document.getElementById("finish-text").textContent =
     `You got ${stars} star${stars === 1 ? "" : "s"} in ${LESSONS[currentLessonKey].title}!`;
   document.getElementById("finish-stars").textContent = "⭐".repeat(stars) || "💪 Keep practicing!";
+  document.getElementById("finish-students").innerHTML = studentStarsText();   // students.js
   tadaSound();
-  say(`Great job, class! You got ${stars} stars! Here is your sticker!`);
+  if (!playVoice("finish")) say(`Great job, class! You got ${stars} stars! Here is your sticker!`);
+
+  // 🫙 Is the reward jar full? Party time!
+  if (jarIsFull()) setTimeout(showParty, 2500);
 }
 
 // ---------- Buttons ----------
@@ -426,8 +466,7 @@ function finishLesson() {
 document.getElementById("speak-again").onclick = () => say(questions[index].speak);
 
 document.getElementById("teacher-star").onclick = () => {
-  stars++;
-  updateStarBar();
+  earnStar();
   const bar = document.getElementById("star-bar");
   bar.classList.remove("star-pop");
   bar.offsetHeight;
@@ -436,11 +475,7 @@ document.getElementById("teacher-star").onclick = () => {
   say("The teacher gave you a star!");
 };
 
-document.getElementById("to-desk").onclick = () => {
-  speechSynthesis.cancel();
-  showScreen("desk");
-};
-document.getElementById("back-to-desk").onclick = () => showScreen("desk");
+// Every "← Desk" button goes back to the desk
+document.querySelectorAll(".to-desk").forEach(btn => (btn.onclick = goToDesk));
 document.getElementById("again").onclick = () => startLesson(currentLessonKey);
-
-buildDesk();
+document.getElementById("finish-recess").onclick = () => startLesson("recess");

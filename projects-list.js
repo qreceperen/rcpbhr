@@ -4,6 +4,14 @@
 
 const PROJECTS = [
   {
+    title: "Science Lab Escape",
+    folder: "projects/2026-11-science-lab-escape",
+    emoji: "🧪",
+    date: "2026-11",
+    category: "Science",
+    description: "Locked in the science lab! Mix potions, melt ice and make a volcano erupt to escape.",
+  },
+  {
     title: "Bedroom Escape",
     folder: "projects/2026-11-bedroom-escape",
     emoji: "🔐",
@@ -33,7 +41,7 @@ const PROJECTS = [
     emoji: "🏫",
     date: "2026-11",
     category: "Teaching",
-    description: "Be the teacher! Counting, letters, colors, shapes and your own questions.",
+    description: "Be the teacher! 13 lessons, 4 games, a class reward jar and your own chalkboard.",
   },
   {
     title: "Guess the Number",

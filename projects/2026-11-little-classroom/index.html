@@ -16,7 +16,22 @@
       <h1>🏫 Little Classroom</h1>
       <p class="subtitle">Good morning, Teacher! Pick today's lesson:</p>
 
+      <h2 class="desk-heading">📚 Lessons</h2>
       <div class="lesson-grid" id="lesson-grid"></div>
+
+      <h2 class="desk-heading">🎲 Games</h2>
+      <div class="lesson-grid" id="game-grid"></div>
+
+      <h2 class="desk-heading">🧑‍🏫 Teacher's tools</h2>
+      <div class="tools-row">
+        <button class="tool-card" id="open-students"><span class="icon">🧒</span>My students (<span id="student-count">0</span>)</button>
+        <button class="tool-card" id="open-voice"><span class="icon">🎤</span>My voice</button>
+        <button class="tool-card" id="open-chalkboard"><span class="icon">🖍️</span>Chalkboard</button>
+        <button class="tool-card jar-card" id="desk-jar" title="Fill the jar with stars for a class party!">
+          <span class="jar" data-jar><span class="marbles"></span></span>
+          Class jar<br><b data-jar-count></b>
+        </button>
+      </div>
 
       <div class="desk-footer">
         <label class="toggle">
@@ -30,11 +45,14 @@
     <!-- 📚 SCREEN 2: The lesson -->
     <section id="lesson" class="screen" hidden>
       <div class="top-bar">
-        <button class="small" id="to-desk">← Desk</button>
+        <button class="small to-desk">← Desk</button>
         <span id="progress">Question 1 of 5</span>
         <span id="star-bar" class="star-bar"></span>
+        <span class="jar mini" data-jar title="Class jar"><span class="marbles"></span></span>
         <button class="small gold" id="teacher-star" title="Give the class a bonus star">⭐ Teacher's star</button>
       </div>
+
+      <div id="turn" class="turn" hidden></div>
 
       <div class="chalkboard">
         <div class="prompt-row">
@@ -55,14 +73,134 @@
         <h1>Great job, class!</h1>
         <p id="finish-text"></p>
         <div id="finish-stars" class="finish-stars"></div>
+        <div id="finish-students" class="finish-students"></div>
         <button id="again">Do it again 🔄</button>
-        <button id="back-to-desk">Back to desk 🏫</button>
+        <button id="finish-recess">Recess! 🫧</button>
+        <button class="to-desk">Back to desk 🏫</button>
+      </div>
+    </section>
+
+    <!-- 🧒 Students -->
+    <section id="students" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <h2 class="screen-title">🧒 My students</h2>
+      </div>
+      <form id="student-form" class="student-form">
+        <input id="student-name" placeholder="Student's name" maxlength="20" autocomplete="off">
+        <button>Add ➕</button>
+      </form>
+      <ul id="student-list" class="student-list"></ul>
+      <p class="note">Students take turns in lessons and in Trace the Letter, and each one earns their own stars.<br>
+        The names stay only on this computer.</p>
+      <button id="reset-student-stars" class="small">Start everyone's stars over</button>
+    </section>
+
+    <!-- 🎤 The teacher's voice -->
+    <section id="voice" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <h2 class="screen-title">🎤 My voice</h2>
+      </div>
+      <p class="note">Record yourself! The game plays YOUR voice instead of the computer voice.
+        Your recordings stay only on this computer.</p>
+      <div id="voice-slots"></div>
+      <p id="voice-status" class="feedback"></p>
+    </section>
+
+    <!-- 🖍️ Chalkboard -->
+    <section id="chalkboard" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <h2 class="screen-title">🖍️ Chalkboard</h2>
+      </div>
+      <div class="board-frame"><canvas id="board" class="board"></canvas></div>
+      <div id="chalk-tray" class="chalk-tray"></div>
+    </section>
+
+    <!-- 🌊 Sorting game -->
+    <section id="sorting" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <h2 class="screen-title">🌳 Land or Sea? 🌊</h2>
+        <span class="star-bar"></span>
+      </div>
+      <div id="sort-tray" class="sort-tray"></div>
+      <div id="sort-boxes" class="sort-boxes"></div>
+      <p id="sort-feedback" class="feedback"></p>
+    </section>
+
+    <!-- 🃏 Matching pairs -->
+    <section id="matching" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <h2 class="screen-title">🃏 Matching Pairs</h2>
+        <span class="star-bar"></span>
+      </div>
+      <div id="match-grid" class="match-grid"></div>
+      <p id="match-feedback" class="feedback"></p>
+    </section>
+
+    <!-- ✏️ Trace the letter -->
+    <section id="tracing" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <span id="trace-progress">Letter 1 of 5</span>
+        <span class="star-bar"></span>
+      </div>
+      <div id="trace-turn" class="turn" hidden></div>
+      <h2 id="trace-prompt" class="trace-prompt"></h2>
+      <div class="trace-box">
+        <canvas id="trace-guide"></canvas>
+        <canvas id="trace-ink"></canvas>
+      </div>
+      <div class="trace-buttons">
+        <button id="trace-clear">🧽 Start over</button>
+        <button id="trace-check">✔ Done</button>
+      </div>
+      <p id="trace-feedback" class="feedback"></p>
+    </section>
+
+    <!-- 🫧 Recess -->
+    <section id="recess" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small to-desk">← Desk</button>
+        <h2 class="screen-title">🫧 Recess!</h2>
+        <span>⏱️ <b id="recess-time">30</b></span>
+        <span>Popped: <b id="popped">0</b></span>
+      </div>
+      <div id="bubble-sky" class="bubble-sky"></div>
+      <div id="recess-over" class="card recess-over" hidden>
+        <h1>🔔 Recess is over!</h1>
+        <p id="recess-result"></p>
+        <button class="to-desk">Back to class 🏫</button>
       </div>
     </section>
 
   </main>
 
+  <!-- 🎉 The class party (when the jar is full) -->
+  <div id="party" class="party" hidden>
+    <div class="confetti"></div>
+    <div class="party-card">
+      <div class="party-title">🎉 CLASS PARTY! 🎉</div>
+      <p>You filled the whole jar with marbles!</p>
+      <div class="party-snacks">🧁 🍕 🎈 🍭</div>
+      <button id="empty-jar">Empty the jar and fill it again 🫙</button>
+    </div>
+  </div>
+
   <script src="lessons.js"></script>
   <script src="script.js"></script>
+  <script src="more-lessons.js"></script>
+  <script src="students.js"></script>
+  <script src="voice.js"></script>
+  <script src="jar.js"></script>
+  <script src="chalkboard.js"></script>
+  <script src="sorting.js"></script>
+  <script src="matching.js"></script>
+  <script src="tracing.js"></script>
+  <script src="recess.js"></script>
+  <script src="desk.js"></script>
 </body>
 </html>
