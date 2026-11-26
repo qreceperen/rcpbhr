@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picture Puzzle</title>
+  <link rel="stylesheet" href="../../shared/styles/main.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+
+    <!-- 🖼️ SCREEN 1: Choose a picture -->
+    <section id="choose" class="screen">
+      <a class="back-link" href="../../index.html">← All projects</a>
+      <h1>🧩 Picture Puzzle</h1>
+
+      <h2>1. How many pieces?</h2>
+      <div class="sizes" id="sizes">
+        <button data-cols="2" data-rows="2" class="active">4 pieces 🐣</button>
+        <button data-cols="3" data-rows="2">6 pieces 🐥</button>
+        <button data-cols="3" data-rows="3">9 pieces 🦅</button>
+        <button data-cols="5" data-rows="3">15 pieces 🐉</button>
+        <button data-cols="5" data-rows="4">20 pieces 🦖</button>
+      </div>
+
+      <h2>2. Pick a picture!</h2>
+      <div class="pictures" id="pictures"></div>
+
+      <label class="upload button">
+        📷 Use my own picture
+        <input type="file" id="upload" accept="image/*" hidden>
+      </label>
+    </section>
+
+    <!-- 🧩 SCREEN 2: The puzzle -->
+    <section id="play" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small" id="back">← Pictures</button>
+        <button class="small helper-button" id="helper-button">👻 Helper: OFF</button>
+        <span id="counter">0 of 4</span>
+      </div>
+
+      <div id="board" class="board">
+        <div id="ghost" class="ghost off"></div>
+      </div>
+
+      <p id="message" class="message">Drag the pieces onto the board!</p>
+
+      <div id="tray" class="tray"></div>
+
+      <div id="win-buttons" class="win-buttons" hidden>
+        <button id="again">Play again 🔄</button>
+        <button id="new-picture">New picture 🖼️</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="pictures.js"></script>
+  <script src="jigsaw.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

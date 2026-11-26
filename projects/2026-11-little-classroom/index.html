@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Little Classroom</title>
+  <link rel="stylesheet" href="../../shared/styles/main.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+
+    <!-- 🏫 SCREEN 1: The teacher's desk (pick a lesson) -->
+    <section id="desk" class="screen">
+      <a class="back-link" href="../../index.html">← All projects</a>
+      <h1>🏫 Little Classroom</h1>
+      <p class="subtitle">Good morning, Teacher! Pick today's lesson:</p>
+
+      <div class="lesson-grid" id="lesson-grid"></div>
+
+      <div class="desk-footer">
+        <label class="toggle">
+          <input type="checkbox" id="read-aloud" checked>
+          🔊 Read questions out loud
+        </label>
+        <div class="class-stars">Class stars so far: <b id="total-stars">0</b> ⭐</div>
+      </div>
+    </section>
+
+    <!-- 📚 SCREEN 2: The lesson -->
+    <section id="lesson" class="screen" hidden>
+      <div class="top-bar">
+        <button class="small" id="to-desk">← Desk</button>
+        <span id="progress">Question 1 of 5</span>
+        <span id="star-bar" class="star-bar"></span>
+        <button class="small gold" id="teacher-star" title="Give the class a bonus star">⭐ Teacher's star</button>
+      </div>
+
+      <div class="chalkboard">
+        <div class="prompt-row">
+          <span id="prompt"></span>
+          <button class="small speak" id="speak-again" title="Hear it again">🔊</button>
+        </div>
+        <div id="picture" class="picture"></div>
+      </div>
+
+      <div id="choices" class="choices"></div>
+      <p id="feedback" class="feedback"></p>
+    </section>
+
+    <!-- 🎉 SCREEN 3: Lesson finished -->
+    <section id="finish" class="screen" hidden>
+      <div class="card finish-card">
+        <div id="sticker" class="sticker">🦄</div>
+        <h1>Great job, class!</h1>
+        <p id="finish-text"></p>
+        <div id="finish-stars" class="finish-stars"></div>
+        <button id="again">Do it again 🔄</button>
+        <button id="back-to-desk">Back to desk 🏫</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="lessons.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

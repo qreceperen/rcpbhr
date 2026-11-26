@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bedroom Escape</title>
+  <link rel="stylesheet" href="../../shared/styles/main.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="home-link" href="../../index.html">← All projects</a>
+
+  <!-- ⏱️ Top bar -->
+  <div class="top-bar">
+    <span class="timer">⏱️ <span id="timer">0:00</span></span>
+    <button id="hint-button" class="grow-button hint-button">💡 Hint</button>
+  </div>
+
+  <!-- 🛏️ THE BEDROOM (everything is placed in % so it fits any screen) -->
+  <div id="stage" class="stage">
+    <div class="wall"></div>
+    <div class="baseboard"></div>
+    <div class="floor"></div>
+
+    <!-- ✨ Fairy lights hanging across the wall (the bulbs are added by game.js) -->
+    <div id="lights" class="thing lights" data-thing="lights"></div>
+
+    <!-- 🔐 The safe (hidden behind the poster) -->
+    <div id="safe" class="thing safe" data-thing="safe">
+      <div id="safe-inside" class="safe-inside"></div>
+      <div class="safe-door">
+        <div class="safe-dial"></div>
+        <div class="safe-keypad">🧸 🎲 🪴</div>
+      </div>
+    </div>
+
+    <!-- 🖼️ Poster (held on with screws) -->
+    <div id="poster" class="thing poster" data-thing="poster">
+      <span class="screw" style="left: 4%; top: 3%;"></span>
+      <span class="screw" style="right: 4%; top: 3%;"></span>
+      <span class="screw" style="left: 4%; bottom: 3%;"></span>
+      <span class="screw" style="right: 4%; bottom: 3%;"></span>
+      <div class="poster-art">🦄🌈</div>
+      <div class="poster-text">DREAM BIG</div>
+    </div>
+
+    <!-- 📚 Bookshelf -->
+    <div class="thing bookshelf" data-thing="bookshelf">
+      <div class="shelf-top"></div>
+      <div class="shelf-box">
+        <!-- Top shelf: the 4 puzzle books (blue, yellow, red, green) + plain books -->
+        <div class="compartment">
+          <span class="book" style="--c:#8d6e63; --h:70%"></span>
+          <span class="book big" style="--c:#3a86ff; --h:88%"></span>
+          <span class="book big" style="--c:#ffd60a; --h:80%"></span>
+          <span class="book big" style="--c:#ff3b3b; --h:92%"></span>
+          <span class="book big" style="--c:#38b000; --h:84%"></span>
+          <span class="book" style="--c:#bdbdbd; --h:66%"></span>
+          <span class="book lean" style="--c:#5d4037; --h:72%"></span>
+        </div>
+        <div class="shelf-board"></div>
+        <!-- Middle shelf: books and a trophy -->
+        <div class="compartment">
+          <span class="book" style="--c:#eeeeee; --h:74%"></span>
+          <span class="book" style="--c:#424242; --h:82%"></span>
+          <span class="book" style="--c:#a1887f; --h:68%"></span>
+          <span class="shelf-emoji">🏆</span>
+        </div>
+        <div class="shelf-board"></div>
+        <!-- Bottom shelf: a stack of books, a plant and a dice -->
+        <div class="compartment">
+          <span class="book-stack">
+            <span class="flat" style="--c:#8d6e63; --w:90%"></span>
+            <span class="flat" style="--c:#bdbdbd; --w:100%"></span>
+            <span class="flat" style="--c:#424242; --w:85%"></span>
+          </span>
+          <span class="shelf-emoji">🪴</span>
+          <span class="shelf-emoji small">🎲</span>
+        </div>
+        <div class="shelf-board"></div>
+      </div>
+      <div class="shelf-base"></div>
+    </div>
+    <div class="thing sitter globe" data-thing="globe" style="left: 35%; top: 22%;">🌍</div>
+
+    <!-- 🪟 Window -->
+    <div class="thing window" data-thing="window">
+      <div class="window-glass"><span class="sun">☀️</span><span class="cloud">☁️</span></div>
+      <div class="window-bar"></div>
+      <div class="curtain left"></div>
+      <div class="curtain right"></div>
+      <div class="window-sill"></div>
+    </div>
+    <div class="thing sitter cat" data-thing="cat" style="left: 53%; top: 35.5%;">🐱</div>
+
+    <!-- 🖥️ Desk with a locked drawer -->
+    <div id="desk" class="thing desk" data-thing="desk">
+      <div class="desk-top"></div>
+      <div id="drawer-inside" class="drawer-inside"></div>
+      <div id="drawer" class="thing drawer" data-thing="drawer">
+        <span class="drawer-knob"></span>
+        <span class="drawer-lock">🔒</span>
+      </div>
+      <div class="desk-leg left"></div>
+      <div class="desk-leg right"></div>
+    </div>
+    <div class="thing sitter lamp" data-thing="lamp" style="left: 46%; top: 44%;">💡</div>
+
+    <!-- 🚪 Wardrobe -->
+    <div id="wardrobe" class="thing wardrobe" data-thing="wardrobe">
+      <div class="wardrobe-inside">
+        <div class="hanger-rod"></div>
+        <div class="clothes">👕👗🧥</div>
+        <div id="shoe-spot" class="shoe-spot">
+          <div class="thing shoe" data-thing="shoe">👟</div>
+        </div>
+      </div>
+      <div class="wardrobe-door left"><span class="knob"></span></div>
+      <div class="wardrobe-door right"><span class="knob"></span></div>
+    </div>
+
+    <!-- 🚪 The way out! -->
+    <div id="door" class="thing door" data-thing="door">
+      <div class="doorway"></div>
+      <div class="door-leaf">
+        <div class="door-panel top"></div>
+        <div class="door-panel bottom"></div>
+        <span class="door-knob"></span>
+        <span id="door-lock" class="door-lock">🔒</span>
+      </div>
+    </div>
+
+    <!-- 🛏️ Bed -->
+    <div class="bed">
+      <div class="headboard"></div>
+      <div class="thing under-bed" data-thing="underBed">
+        <div id="under-bed-spot" class="under-bed-spot"></div>
+      </div>
+      <div class="mattress"></div>
+      <div class="blanket"></div>
+      <div class="thing pillow" data-thing="pillow"></div>
+      <div class="bed-leg left"></div>
+      <div class="bed-leg right"></div>
+    </div>
+    <div class="thing sitter teddy" data-thing="teddy" style="left: 21%; top: 60%;">🧸</div>
+
+    <!-- 🧸 Toy box -->
+    <div id="toybox" class="thing toybox" data-thing="toybox">
+      <div class="toybox-lid"></div>
+      <div class="toybox-hole"></div>
+      <div id="toybox-contents" class="toybox-contents">
+        <span>🚗</span><span>🪀</span>
+      </div>
+      <div class="toybox-front"><span class="toybox-lock">🔒</span></div>
+    </div>
+
+    <!-- 🟣 Rug -->
+    <div id="rug" class="thing rug" data-thing="rug"></div>
+
+    <!-- 🌑 Darkness + 🔦 flashlight beam -->
+    <div id="darkness" class="darkness"></div>
+  </div>
+
+  <!-- 🎒 Backpack -->
+  <div class="backpack">
+    <span class="backpack-label">🎒</span>
+    <div id="inventory" class="inventory"></div>
+  </div>
+  <p id="message" class="message">Click on things to look at them.</p>
+
+  <!-- ✋ The item you are holding follows the mouse -->
+  <div id="hand" class="hand" hidden></div>
+
+  <!-- 🔍 Pop-up box: notes, locks, the bookshelf up close -->
+  <div id="popup" class="popup" hidden>
+    <button id="popup-close" class="grow-button close-button">X</button>
+    <h2 id="popup-title"></h2>
+    <div id="popup-body"></div>
+  </div>
+
+  <!-- 🟦 Start screen -->
+  <div id="start-screen" class="big-rectangle">
+    <h1 class="title">Bedroom Escape</h1>
+    <button id="play-button" class="grow-button play-button">Play</button>
+  </div>
+
+  <!-- 📜 Directions -->
+  <div id="directions-screen" class="big-rectangle" hidden>
+    <button id="start-button" class="grow-button close-button">X</button>
+    <h1 class="title">Directions:</h1>
+    <p class="directions">
+      You woke up and your bedroom door is locked! 🔒
+      Click on things to look at them. Collect items in your backpack 🎒.
+      Click an item, then click where to use it.
+      Find the clues, solve the puzzles, and escape!
+    </p>
+  </div>
+
+  <!-- 🎉 You escaped! -->
+  <div id="win-screen" class="big-rectangle" hidden>
+    <h1 class="title">You Escaped! 🎉</h1>
+    <p id="win-text" class="directions"></p>
+    <button id="again-button" class="grow-button play-button">Play again</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

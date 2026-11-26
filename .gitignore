@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+
+# 🎤 Our own voice recordings stay private (they work when playing on this Mac)
+*.m4a

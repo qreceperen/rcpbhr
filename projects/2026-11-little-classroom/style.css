@@ -1,0 +1,124 @@
+.subtitle { font-size: 1.3rem; color: var(--muted); }
+
+/* ---------- Teacher's desk ---------- */
+.lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.lesson-card {
+  background: var(--card);
+  color: var(--text);
+  border: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px 10px;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.lesson-card .icon { display: block; font-size: 3.2rem; }
+
+.desk-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 1.1rem;
+}
+.toggle { cursor: pointer; }
+.toggle input { transform: scale(1.4); margin-right: 6px; }
+
+/* ---------- Lesson ---------- */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+.top-bar .star-bar { flex: 1; font-size: 1.5rem; min-height: 2rem; }
+
+button.small { padding: 8px 14px; font-size: 1rem; }
+button.gold { background: var(--accent); color: var(--text); }
+
+.chalkboard {
+  background: #2f5d50;
+  color: white;
+  border: 12px solid #8b5a2b;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  min-height: 220px;
+}
+.prompt-row {
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+button.speak { background: rgba(255, 255, 255, 0.2); font-size: 1.4rem; }
+
+.picture {
+  font-size: 4rem;
+  margin-top: 14px;
+  line-height: 1.3;
+}
+.picture.count { font-size: 3rem; max-width: 520px; margin: 14px auto 0; }
+
+.choices {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 24px 0 8px;
+}
+button.choice {
+  background: var(--card);
+  color: var(--text);
+  border: 4px solid var(--secondary);
+  min-width: 120px;
+  min-height: 120px;
+  font-size: 3.2rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+button.choice:disabled { cursor: default; }
+button.choice.correct { border-color: #38b000; background: #e6ffe0; transform: scale(1.12); }
+button.choice.wrong { opacity: 0.35; animation: shake 0.4s; }
+
+.blob {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.feedback {
+  text-align: center;
+  font-size: 1.8rem;
+  min-height: 2.5rem;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* ---------- Finish ---------- */
+.finish-card { text-align: center; font-size: 1.3rem; }
+.finish-card button { margin: 8px; }
+.sticker { font-size: 7rem; animation: pop 0.6s ease; }
+.finish-stars { font-size: 2.5rem; margin: 10px 0 20px; }
+
+@keyframes pop {
+  0% { transform: scale(0) rotate(-30deg); }
+  70% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.star-pop { animation: pop 0.5s ease; display: inline-block; }

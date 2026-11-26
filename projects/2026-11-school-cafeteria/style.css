@@ -1,0 +1,378 @@
+/* The whole game fills the window, no scrolling */
+body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* 🏫 Cafeteria background, behind everything */
+#cafeteria {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.home-link {
+  position: fixed;
+  top: 10px;
+  left: 12px;
+  z-index: 2;
+  background: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* 🟦 The big rectangle: almost as big as the screen */
+.big-rectangle {
+  position: fixed;
+  inset: 6vh 6vw;               /* small gap all around, so the cafeteria shows */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;  /* title starts at the top of the rectangle */
+  padding-top: 6vh;
+  gap: 8vh;
+  background: rgba(255, 255, 255, 0.9);
+  border: 6px solid #ff6b9d;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* "School Cafeteria" at the top, in front of the big rectangle */
+.title {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-size: clamp(2.2rem, 7vw, 5rem);
+  color: #ff6b9d;
+  text-shadow: 3px 3px 0 #ffd166;
+  text-align: center;
+}
+
+/* 🟨 The smaller "Play" rectangle */
+.play-button {
+  width: clamp(180px, 26vw, 320px);
+  height: clamp(70px, 12vh, 110px);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  background: #6bc5ff;
+  color: white;
+  border: 5px solid white;
+  border-radius: 18px;
+  box-shadow: 0 6px 0 #3a86ff;
+  cursor: pointer;
+
+  /* ⚡ Grow and shrink REALLY fast */
+  transition: transform 0.06s ease-out;
+}
+
+/* ❌ The X button in the top-right corner */
+.close-button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  background: #ff6b6b;
+  color: white;
+  border: 4px solid white;
+  border-radius: 14px;
+  box-shadow: 0 5px 0 #c92a2a;
+  cursor: pointer;
+
+  /* ⚡ Same really fast grow as the Play button */
+  transition: transform 0.06s ease-out;
+}
+
+/* Mouse touching the button → grow a bit */
+.play-button:hover,
+.close-button:hover {
+  transform: scale(1.12);
+}
+
+/* Pressed → squish a little */
+.play-button:active,
+.close-button:active {
+  transform: scale(1.04);
+}
+
+/* 📜 The directions text */
+.directions {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0;
+  padding: 0 40px;
+  font-size: clamp(1.3rem, 2.6vw, 2rem);
+  line-height: 1.6;
+  text-align: center;
+  color: #2d2a32;
+}
+
+/* ================= 🎮 THE GAME ================= */
+
+.game {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.score {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 4px solid #ffd166;
+  border-radius: 18px;
+  padding: 4px 22px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  z-index: 5;
+}
+
+.toast {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff6b9d;
+  color: white;
+  border-radius: 16px;
+  padding: 8px 20px;
+  font-size: 1.3rem;
+  white-space: nowrap;
+  z-index: 5;
+}
+
+/* The invisible spot on top of each table */
+.table-spot {
+  position: absolute;
+  border-radius: 10px;
+}
+
+/* 🧽 Messy table: glows so you know to clean it */
+.table-spot.messy {
+  cursor: pointer;
+  animation: glow 0.8s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.4); }
+  to   { box-shadow: 0 0 0 7px rgba(255, 209, 102, 1); }
+}
+
+.kid, .lunch, .mess, .sparkle, .crumb, .star-pop {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  line-height: 1;
+}
+
+/* 🧒 Kids sit on the chairs behind the table */
+.kid {
+  top: -45%;
+  font-size: 6vh;
+  transition: opacity 0.5s, transform 0.5s;
+}
+.kid.leaving { opacity: 0; transform: translate(-50%, -120%); }
+.kid.needs-help { cursor: pointer; }
+
+.need-mark {
+  position: absolute;
+  top: -55%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 4vh;
+  animation: bounce 0.4s ease-in-out infinite alternate;
+}
+@keyframes bounce {
+  from { transform: translate(-50%, 0); }
+  to   { transform: translate(-50%, -8px); }
+}
+
+.lunch { top: 55%; font-size: 4vh; }
+.mess { font-size: 4vh; pointer-events: none; }
+.sparkle { left: 50%; top: 50%; font-size: 6vh; animation: sparkle 0.7s ease-out forwards; pointer-events: none; }
+@keyframes sparkle {
+  from { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  to   { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+
+/* 🧹 Crumbs on the floor */
+.crumb {
+  font-size: 3.5vh;
+  transition: opacity 0.15s;
+}
+
+.star-pop {
+  position: fixed;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #ff9f1c;
+  pointer-events: none;
+  z-index: 20;
+  animation: float-up 0.9s ease-out forwards;
+}
+@keyframes float-up {
+  to { margin-top: -60px; opacity: 0; }
+}
+
+/* 💬 The help box (when a kid needs something) */
+.help-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 88vw);
+  padding: 30px 24px 36px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  background: white;
+  border: 6px solid #ff6b9d;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+.help-kid { font-size: 5rem; line-height: 1; }
+.speech-bubble {
+  background: #fff3bf;
+  border-radius: 18px;
+  padding: 12px 22px;
+  font-size: 1.7rem;
+  text-align: center;
+}
+.help-choices { display: flex; gap: 18px; }
+
+.choice-button {
+  width: 100px;
+  height: 100px;
+  font-size: 3.4rem;
+  background: white;
+  border: 4px solid #6bc5ff;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform 0.06s ease-out;
+}
+.choice-button:hover { transform: scale(1.12); }
+.choice-button.wrong { animation: shake 0.4s; }
+@keyframes shake {
+  0%, 100% { translate: 0; }
+  25% { translate: -10px; }
+  75% { translate: 10px; }
+}
+
+/* 👩‍🍳 The lunch lady */
+.lunch-lady {
+  position: absolute;
+  font-size: 10vh;
+  line-height: 1;
+  pointer-events: none;      /* clicks go through her to tables and crumbs */
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 6px 3px rgba(0, 0, 0, 0.25));
+}
+.lady-body { display: inline-block; }
+.lunch-lady.walking .lady-body { animation: waddle 0.25s ease-in-out infinite alternate; }
+@keyframes waddle {
+  from { transform: translateY(0) rotate(-4deg); }
+  to   { transform: translateY(-6px) rotate(4deg); }
+}
+
+/* 🚪 The closet on the wall */
+.closet {
+  position: absolute;
+  left: 45.5%;
+  top: 27%;
+  width: 8%;
+  height: 33%;
+  cursor: pointer;
+  z-index: 1;
+}
+.closet-inside {
+  position: absolute;
+  inset: 0;
+  background: #3d2b1f;
+  border: 5px solid #6b4226;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 5vh;
+}
+.closet-tool {
+  cursor: pointer;
+  transition: transform 0.06s ease-out;
+}
+.closet-tool:hover { transform: scale(1.25); }
+.closet-bucket { font-size: 4.5vh; pointer-events: none; }
+
+.closet-door {
+  position: absolute;
+  inset: 0;
+  background: #b07d4f;
+  border: 5px solid #6b4226;
+  border-radius: 6px 6px 0 0;
+  transform-origin: left center;
+  transition: transform 0.35s ease-out;
+  display: flex;
+  justify-content: center;
+}
+/* Open: the door swings to the side so you can see inside */
+.closet.open .closet-door {
+  transform: scaleX(0.12);
+  filter: brightness(0.75);
+  pointer-events: none;
+}
+.closet.open .closet-door > * { visibility: hidden; }
+.closet-sign {
+  margin-top: 18%;
+  height: fit-content;
+  background: white;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: clamp(0.6rem, 1.1vw, 0.9rem);
+  font-weight: bold;
+  color: #6b4226;
+}
+.closet-knob {
+  position: absolute;
+  right: 12%;
+  top: 52%;
+  width: 12px;
+  height: 12px;
+  background: #ffd166;
+  border-radius: 50%;
+}
+.closet:not(.open):hover .closet-door { filter: brightness(1.1); }
+
+/* 🧹🧽 Tool in the lunch lady's hand */
+.held-tool {
+  position: absolute;
+  right: -0.35em;
+  bottom: 0.05em;
+  font-size: 0.75em;
+  transform: rotate(15deg);
+}
+
+/* 🧹🧽 Tool while using it: follows the mouse and swishes */
+.drag-tool {
+  position: fixed;
+  font-size: 9vh;
+  line-height: 1;
+  transform: translate(-30%, -75%);
+  pointer-events: none;
+  z-index: 15;
+  animation: swish 0.15s ease-in-out infinite alternate;
+}
+@keyframes swish {
+  from { rotate: -12deg; }
+  to   { rotate: 12deg; }
+}

@@ -1,0 +1,72 @@
+/* Shared look for every project. Change these colors together! */
+:root {
+  --bg: #fff8f0;
+  --card: #ffffff;
+  --primary: #ff6b9d;
+  --secondary: #6bc5ff;
+  --accent: #ffd166;
+  --text: #2d2a32;
+  --muted: #7a7480;
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+/* Anything marked "hidden" really stays hidden (even buttons) */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Trebuchet MS", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1, h2, h3 { color: var(--primary); }
+
+a { color: var(--secondary); }
+
+button, .button {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 22px;
+  font-size: 1.1rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s;
+}
+
+button:hover, .button:hover { transform: scale(1.05); }
+button:active, .button:active { transform: scale(0.97); }
+
+input {
+  font-family: inherit;
+  font-size: 1.1rem;
+  padding: 10px 14px;
+  border: 3px solid var(--secondary);
+  border-radius: var(--radius);
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-weight: bold;
+}

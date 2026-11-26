@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Cafeteria</title>
+  <link rel="stylesheet" href="../../shared/styles/main.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 🏫 The cafeteria, drawn behind everything -->
+  <canvas id="cafeteria"></canvas>
+
+  <a class="home-link" href="../../index.html">← All projects</a>
+
+  <!-- 🟦 The big rectangle (start screen) -->
+  <div id="start-screen" class="big-rectangle">
+    <h1 class="title">School Cafeteria</h1>
+    <button id="play-button" class="play-button">Play</button>
+  </div>
+
+  <!-- 📜 Directions (after pressing Play) -->
+  <div id="directions-screen" class="big-rectangle" hidden>
+    <button id="close-button" class="close-button" title="Close">X</button>
+    <h1 class="title">Directions:</h1>
+    <p class="directions">
+      You are a lunch lady. Take care of the cafeteria.
+      When a class leaves, clean the tables. Broom the floors.
+      When there is an exclamation mark on a kid, press on it.
+      Read what the kid needs. Then help them.
+      Good luck!
+    </p>
+  </div>
+
+  <!-- 🎮 THE GAME (starts when you press X) -->
+  <div id="game" class="game" hidden>
+    <div class="score">⭐ <span id="score">0</span></div>
+    <div id="toast" class="toast" hidden></div>
+
+    <!-- 🚪 The closet (click to open) -->
+    <div id="closet" class="closet">
+      <div class="closet-inside">
+        <div class="closet-tool" data-tool="broom" title="Take the broom">🧹</div>
+        <div class="closet-tool" data-tool="sponge" title="Take the sponge">🧽</div>
+        <div class="closet-bucket">🪣</div>
+      </div>
+      <div class="closet-door">
+        <span class="closet-sign">CLOSET</span>
+        <span class="closet-knob"></span>
+      </div>
+    </div>
+
+    <!-- 🧹🧽 The tool while you are using it (follows the mouse) -->
+    <div id="drag-tool" class="drag-tool" hidden>🧹</div>
+  </div>
+
+  <!-- 💬 A kid needs help! -->
+  <div id="help-popup" class="help-popup" hidden>
+    <button id="help-close" class="close-button" title="Close">X</button>
+    <div id="help-kid" class="help-kid">👦</div>
+    <div id="help-text" class="speech-bubble">I need a fork!</div>
+    <div id="help-choices" class="help-choices"></div>
+  </div>
+
+  <script src="cafeteria.js"></script>
+  <script src="game.js"></script>
+  <script src="lunch-lady.js"></script>
+  <script src="tools.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

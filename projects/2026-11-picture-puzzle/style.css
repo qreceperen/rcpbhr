@@ -1,0 +1,128 @@
+body { background: #ffffff; }
+
+h2 { font-size: 1.3rem; margin: 18px 0 10px; }
+
+.sizes button { margin: 4px; background: var(--secondary); }
+.sizes button.active { background: var(--primary); box-shadow: 0 0 0 4px var(--accent); }
+
+/* ---------- Picture choices ---------- */
+.pictures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.picture-choice {
+  background: var(--card);
+  color: var(--text);
+  padding: 8px;
+  border: 4px solid var(--accent);
+}
+.picture-choice img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.upload { background: var(--secondary); }
+
+/* ---------- Puzzle ---------- */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+button.small { padding: 8px 14px; font-size: 1rem; }
+
+.board {
+  position: relative;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 6px solid #8b5a2b;
+  border-radius: 10px;
+  box-sizing: content-box;
+}
+/* The faint helper picture on the board */
+.ghost {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  opacity: 0.25;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.ghost.off { opacity: 0; }
+
+button.helper-button { background: var(--muted); }
+button.helper-button.on { background: var(--accent); color: var(--text); }
+
+/* Dashed jigsaw outlines on the board */
+.outlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.board.done .outlines { opacity: 0; }
+
+/* Invisible spots used to check where a piece is dropped */
+.slot { position: absolute; border-radius: 12px; }
+.slot.hover { background: rgba(255, 209, 102, 0.45); }
+
+/* drop-shadow follows the jigsaw shape (box-shadow would be a rectangle) */
+.piece {
+  display: block;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+  cursor: grab;
+  touch-action: none;   /* so dragging on a tablet doesn't scroll the page */
+  user-select: none;
+}
+.piece.dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.4));
+  transform: scale(1.06);
+  z-index: 1000;
+}
+.piece.placed {
+  position: absolute;
+  filter: none;
+  pointer-events: none;
+  animation: snap 0.25s ease;
+}
+.piece.wiggle { animation: wiggle 0.4s; }
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 10px auto;
+  padding: 14px;
+  min-height: 60px;
+  background: rgba(107, 197, 255, 0.15);
+  border-radius: var(--radius);
+}
+.tray:empty { display: none; }
+
+.message { text-align: center; font-size: 1.5rem; min-height: 2.2rem; margin: 12px 0; }
+
+.board.done { animation: celebrate 0.6s ease 2; }
+
+.win-buttons { text-align: center; }
+.win-buttons button { margin: 6px; }
+
+@keyframes snap {
+  0% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+@keyframes celebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04) rotate(1deg); }
+}
